@@ -1,0 +1,152 @@
+<div class="container p-3">
+  <form class="row" *ngIf="!formVisible">
+    <div class="col-auto">
+      <button (click)="displayForm()" class="btn btn-primary mb-3">
+        Add New Task
+      </button>
+    </div>
+  </form>
+  <form class="row" *ngIf="formVisible">
+    <div class="col-auto">
+      <input
+        [(ngModel)]="model.name"
+        name="task"
+        type="input"
+        class="form-control"
+        placeholder="Task Name"
+      />
+    </div>
+    <div class="col-auto">
+      <select [(ngModel)]="model.difficulty" name="diff" class="form-select">
+        <option selected [ngValue]="null" hidden>Select</option>
+        <option [ngValue]="difficulty.Easy">Easy</option>
+        <option [ngValue]="difficulty.Medium">Medium</option>
+        <option [ngValue]="difficulty.Hard">Hard</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button type="submit" (click)="addTask()" class="btn btn-primary mb-3">
+        Add
+      </button>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col">
+      <div class="card border-primary">
+        <div class="card-header">
+          <div><i class="fa fa-tasks"></i>&nbsp;To-do</div>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <span *ngIf="!todos?.length">{{ emptySting }}</span>
+            <li
+              class="list-group-item"
+              *ngFor="let todo of todos; let i = index"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <span>{{ i + 1 }}. {{ todo.name }}</span>
+                <div>
+                  <button
+                    type="button"
+                    (click)="moveToInProgressFromTodo(todo, i)"
+                    title="Move to in progress"
+                    class="btn btn-primary btn-sm me-2"
+                  >
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="remove(i)"
+                    title="Move to in progress"
+                    class="btn btn-danger btn-sm"
+                  >
+                    <i class="fa fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="badge bg-primary" [ngClass]="getStyles(todo)">{{
+                todo.difficulty
+              }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-info">
+        <div class="card-header">
+          <div><i class="fa fa-tasks"></i>&nbsp;In Progress</div>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <span *ngIf="!inProgresses?.length">{{ emptySting }}</span>
+            <li
+              class="list-group-item"
+              *ngFor="let inProgress of inProgresses; let i = index"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <span>{{ i + 1 }}. {{ inProgress.name }}</span>
+                <div>
+                  <button
+                    type="button"
+                    title="Move to to-do"
+                    (click)="moveToTodo(inProgress, i)"
+                    class="btn btn-primary btn-sm me-1"
+                  >
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="moveToDone(inProgress, i)"
+                    title="Move to done"
+                    class="btn btn-success btn-sm"
+                  >
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+              <span
+                class="badge bg-primary"
+                [ngClass]="getStyles(inProgress)"
+                >{{ inProgress.difficulty }}</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card border-success">
+        <div class="card-header">
+          <div><i class="fa fa-tasks"></i>&nbsp;Done</div>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <span *ngIf="!dones?.length">{{ emptySting }}</span>
+            <li
+              *ngFor="let done of dones; let i = index"
+              class="list-group-item"
+            >
+              <div class="d-flex justify-content-between align-items-center">
+                <span>{{ done.name }}</span>
+                <div>
+                  <button
+                    type="button"
+                    title="Move to in progress"
+                    (click)="moveToInProgressFromDone(done, i)"
+                    class="btn btn-primary btn-sm"
+                  >
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="badge bg-primary" [ngClass]="getStyles(done)">{{
+                done.difficulty
+              }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
